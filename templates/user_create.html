@@ -1,0 +1,37 @@
+{{ define "user_create"}}
+{{template "header"}}
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+			<form>
+			<div class="form-group">
+			    <label for="inputId">Id</label>
+			    <input type="text" class="form-control" id="inputId" placeholder="Enter Id">
+			</div>
+
+			<div class="form-group">
+			    <label for="inputName">Name</label>
+			    <input type="text" class="form-control" id="inputName" placeholder="Enter Name">
+			</div>
+
+			<div class="form-group">
+			    <label for="inputUsername">Username</label>
+			    <input type="text" class="form-control" id="inputUsername" placeholder="Enter Username">
+			</div>
+
+			<div class="form-group">
+			    <label for="inputPassword">Password</label>
+			    <input type="text" class="form-control" id="inputPassword" placeholder="Enter Password">
+			</div>
+
+			  	<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+
+			</div>
+		</div>
+	</div>
+{{template "footer"}}
+</body>
+{{ end }}

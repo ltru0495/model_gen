@@ -10,6 +10,12 @@ func SetAppRoutes(router *mux.Router) *mux.Router {
 
 	appRouter.HandleFunc("/", controllers.IndexGET)
 
+	appRouter.HandleFunc("/user/create", controllers.UserCreate).Methods("GET", "POST")
+	appRouter.HandleFunc("/users", controllers.UserTable).Methods("GET")
+	appRouter.HandleFunc("/user/create", controllers.UserCreate).Methods("GET", "POST")
+	appRouter.HandleFunc("/users", controllers.UserTable).Methods("GET")
+	appRouter.HandleFunc("/user/create", controllers.UserCreate).Methods("GET", "POST")
+	appRouter.HandleFunc("/users", controllers.UserTable).Methods("GET")
 	router.PathPrefix("/").Handler(appRouter)
 	return router
 }

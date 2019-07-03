@@ -59,11 +59,12 @@ func AddRoute(filename, route string) error {
 	}
 	err = CreateFile(filename, text)
 
-	fmt.Println(text)
+	// fmt.Println(text)
 	if err != nil {
 		fmt.Println(err)
 		return err
 	}
+	fmt.Printf("Route %s added\n", route)
 	return nil
 }
 
@@ -114,7 +115,7 @@ func modelForm(model Model) string {
 	for _, field := range model.Fields {
 		formGroups += fmt.Sprintf(consts.FormGroup, strings.Title(field.Name))
 	}
-	formContent := fmt.Sprintf(consts.Form, formGroups)
+	formContent := fmt.Sprintf(consts.Form, strings.ToLower(model.Name)+"_create", formGroups)
 	return formContent
 }
 
@@ -130,6 +131,7 @@ func modelTable(model Model) string {
 }
 
 func ModelGen(model Model) {
+
 	model.Fields = append([]ModelField{{"id", "primitive.ObjectID"}}, model.Fields...)
 	fieldsContent := ""
 	updateContent := ""
@@ -148,15 +150,22 @@ func ModelGen(model Model) {
 	CreateFile("./models/"+strings.ToLower(model.Name)+".go", fileContent)
 
 	htmlCreateContent := fmt.Sprintf(consts.HTMLConst, strings.ToLower(model.Name)+"_create", modelForm(model))
+	routeCreate := fmt.Sprintf(`appRouter.HandleFunc("/%s", controllers.%s).Methods("GET", "POST")`,
+		strings.ToLower(model.Name)+"/create", strings.Title(model.Name)+"Create")
+	AddRoute("./routers/app.go", routeCreate)
 	CreateFile("./templates/"+strings.ToLower(model.Name)+"_create.html", htmlCreateContent)
+
+	htmlTableContent := fmt.Sprintf(consts.HTMLConst, strings.ToLower(model.Name)+"_table", modelTable(model))
+	routeTable := fmt.Sprintf(`appRouter.HandleFunc("/%ss", controllers.%s).Methods("GET")`,
+		strings.ToLower(model.Name), strings.Title(model.Name)+"Table")
+	AddRoute("./routers/app.go", routeTable)
+	CreateFile("./templates/"+strings.ToLower(model.Name)+"_table.html", htmlTableContent)
+	// fmt.Println(htmlTableContent)
 
 	// fmt.Printf(htmlCreateContent)
 	controllerContent := fmt.Sprintf(consts.ControllerConst, strings.Title(model.Name), strings.ToLower(model.Name))
 	CreateFile("./controllers/"+strings.ToLower(model.Name)+"Controller.go", controllerContent)
 	// fmt.Println(controllerContent)
-
-	// htmlTableContent := fmt.Sprintf(consts.HTMLConst, strings.ToLower(model.Name)+"_table", modelTable(model))
-	// fmt.Println(htmlTableContent)
 
 }
 

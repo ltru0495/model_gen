@@ -1,4 +1,6 @@
+package consts
 
+const ControllerConst = `
 package controllers
 import (
 	"../models"
@@ -9,16 +11,16 @@ import (
 	"github.com/gorilla/schema"
 )
 
-func UserCreate(w http.ResponseWriter, r *http.Request) {
+func %sCreate(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 		err := r.ParseForm()
 		if err != nil {
 			log.Println(err)
 		} else {
-			user := new(models.User)
+			%s := new(models.%[1]s)
 			
 			decoder := schema.NewDecoder()
-			err = decoder.Decode(user, r.PostForm)
+			err = decoder.Decode(%[2]s, r.PostForm)
 			if err != nil {
 				log.Println(err)
 			} else {
@@ -33,7 +35,7 @@ func UserCreate(w http.ResponseWriter, r *http.Request) {
 }
 
 
-func UserTable(w http.ResponseWriter, r *http.Request) {
+func %[1]sTable(w http.ResponseWriter, r *http.Request) {
 	users := models.AllUsers()
 
 	context := make(map[string]interface{})
@@ -42,3 +44,4 @@ func UserTable(w http.ResponseWriter, r *http.Request) {
 	utils.RenderTemplate(w, "info", context)
 }
 
+`
